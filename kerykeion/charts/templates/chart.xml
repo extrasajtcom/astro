@@ -10,7 +10,7 @@ This file is part of Kerykeion and is based on OpenAstro.org -->
     viewBox="$viewbox"
     preserveAspectRatio="xMidYMid"
 >
-    <title>Kerykeion</title>
+    <title>Astropedija Natalna karta - $stringName</title>
     <g transform="translate($cfgTranslate)">
         <g transform="rotate($cfgRotate)">
             <g transform="scale($cfgZoom)">
@@ -22,10 +22,7 @@ This file is part of Kerykeion and is based on OpenAstro.org -->
                 <text x="20" y="86" style="fill: $paper_color_0; font-size: 11px">$stringLat</text>
                 <text x="20" y="98" style="fill: $paper_color_0; font-size: 11px">$stringLon</text>
                 <text x="20" y="110" style="fill: $paper_color_0; font-size: 11px">$stringPosition</text>
-                <text x="20" y="480" style="fill: $paper_color_0; font-size: 10px">$bottomLeft1</text>
-                <text x="20" y="494" style="fill: $paper_color_0; font-size: 10px">$bottomLeft2</text>
-                <text x="20" y="508" style="fill: $paper_color_0; font-size: 10px">$bottomLeft3</text>
-                <text x="20" y="522" style="fill: $paper_color_0; font-size: 10px">$bottomLeft4</text>
+
                 <!-- Lunar Phase -->
                 <g transform="translate(20,518)">
                     <g transform="rotate($lunar_phase_rotate 20 10)">
