@@ -1,86 +1,63 @@
+import json
 from kerykeion import AstrologicalSubject
-from terminaltables import AsciiTable
 
 class Report:
     """
     Create a report for a Kerykeion instance.
     """
 
-    report_title: str
-    data_table: str
-    planets_table: str
-    houses_table: str
-
     def __init__(self, instance: AstrologicalSubject):
         self.instance = instance
 
-        self.get_report_title()
-        self.get_data_table()
-        self.get_planets_table()
-        self.get_houses_table()
+    def get_report_title(self) -> dict:
+        return {"title": f"Report for {self.instance.name}"}
 
-    def get_report_title(self) -> None:
-        self.report_title = f"\n+- Kerykeion report for {self.instance.name} -+"
+    def get_data_table(self) -> dict:
+        return {
+            "data": {
+                "Date": f"{self.instance.day}/{self.instance.month}/{self.instance.year}",
+                "Time": f"{self.instance.hour}:{self.instance.minute}",
+                "Location": f"{self.instance.city}, {self.instance.nation}",
+                "Longitude": self.instance.lng,
+                "Latitude": self.instance.lat,
+            }
+        }
 
-    def get_data_table(self) -> None:
-        """
-        Creates the data table of the report.
-        """
-
-        main_data = [["Date", "Time", "Location", "Longitude", "Latitude"]] + [
-            [
-                f"{self.instance.day}/{self.instance.month}/{self.instance.year}",
-                f"{self.instance.hour}:{self.instance.minute}",
-                f"{self.instance.city}, {self.instance.nation}",
-                self.instance.lng,
-                self.instance.lat,
-            ]
-        ]
-        self.data_table = AsciiTable(main_data).table
-
-    def get_planets_table(self) -> None:
-        """
-        Creates the planets table.
-        """
-
-        planets_data = [["Planet", "Sign", "Pos.", "Ret.", "House"]] + [
-            [
-                planet.name,
-                planet.sign,
-                round(float(planet.position), 2),
-                ("R" if planet.retrograde else "-"),
-                planet.house,
-            ]
+    def get_planets_table(self) -> dict:
+        planets_data = [
+            {
+                "Planet": planet.name,
+                "Sign": planet.sign,
+                "Position": round(float(planet.position), 2),
+                "Retrograde": "R" if planet.retrograde else "-",
+                "House": planet.house,
+            }
             for planet in self.instance.planets_list
         ]
+        return {"planets": planets_data}
 
-        self.planets_table = AsciiTable(planets_data).table
-
-    def get_houses_table(self) -> None:
-        """
-        Creates the houses table.
-        """
-
-        houses_data = [["House", "Sign", "Position"]] + [
-            [house.name, house.sign, round(float(house.position), 2)] for house in self.instance.houses_list
+    def get_houses_table(self) -> dict:
+        houses_data = [
+            {
+                "House": house.name,
+                "Sign": house.sign,
+                "Position": round(float(house.position), 2),
+            }
+            for house in self.instance.houses_list
         ]
-
-        self.houses_table = AsciiTable(houses_data).table
+        return {"houses": houses_data}
 
     def get_full_report(self) -> str:
-        """
-        Returns the full report.
-        """
-
-        return f"{self.report_title}\n{self.data_table}\n{self.planets_table}\n{self.houses_table}"
+        report_data = {
+            **self.get_report_title(),
+            **self.get_data_table(),
+            **self.get_planets_table(),
+            **self.get_houses_table()
+        }
+        return json.dumps(report_data, indent=2)
 
     def print_report(self) -> None:
-        """
-        Print the report.
-        """
-
         print(self.get_full_report())
-
 
 if __name__ == "__main__":
     from kerykeion.utilities import setup_logging
